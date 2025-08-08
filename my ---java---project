@@ -1,0 +1,51 @@
+from pathlib import Path
+from zipfile import ZipFile
+
+# Define the project structure and files
+project_name = "MyJavaProject"
+base_path = Path(project_name)
+src_path = base_path / "src"
+
+# Create directories
+src_path.mkdir(parents=True, exist_ok=True)
+
+# Create Main.java
+main_java = """public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java GitHub Project!");
+    }
+}
+"""
+(src_path / "Main.java").write_text(main_java)
+
+# Create .gitignore
+gitignore = """*.class
+*.log
+*.iml
+.idea/
+target/
+out/
+*.jar
+"""
+(base_path / ".gitignore").write_text(gitignore)
+
+# Create README.md
+readme = """# My Java Project
+
+This is a sample Java project with Git integration.
+
+## How to Run
+
+```bash
+javac src/Main.java
+java -cp src Main
+"""
+(base_path / "README.md").write_text(readme)
+
+Create ZIP file
+zip_path = base_path.with_suffix(".zip")
+with ZipFile(zip_path, "w") as zipf:
+for file in base_path.rglob("*"):
+zipf.write(file, file.relative_to(base_path.parent))
+
+print(f"Repository zip created: {zip_path}")
